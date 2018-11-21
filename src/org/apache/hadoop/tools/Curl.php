@@ -16,7 +16,8 @@ class Curl {
 	    if ($localPath) {
             if (touch($localPath)) {
                 $option['CURLOPT_WRITEFUNCTION_PATH'] = $localPath;
-                $this->get($url, $option);
+                $res = $this->get($url, $option);
+                return $res;
             } else {
                 return false;
             }
@@ -59,7 +60,7 @@ class Curl {
 		$handle = fopen($filename, "r");
 		$options[CURLOPT_INFILE] = $handle;
 		$options[CURLOPT_INFILESIZE] = filesize($filename);
-
+        $options[CURLOPT_HTTPHEADER]=['content-type:application/octet-stream'];
 		$info = $this->_exec($options, true);
 
 		return ('201' == $info['http_code']);
